@@ -1,0 +1,11 @@
+{% autoescape off %} <!--for rendering the email-->
+
+Hi {{user.first_name}},
+
+Please click on below link to confirm your registration.
+http://{{domain}}{% url 'activate' uidb64=uid token=token %} <!-- here we are forming the link which user will click
+ in uidb is encodede and in activate view we will decode it and will set user is active status to true-->
+
+If you think it's not you, please ignore this email.
+
+{% endautoescape %} <!--for rendering the email-->
