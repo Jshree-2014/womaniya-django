@@ -42,8 +42,8 @@ def register(request):
             profile.profile_picture = 'default/default-user.png'
             profile.save()
 
-            # USER ACTIVATION
-            current_site = get_current_site(request)
+            # USER ACTIVATION This is email activation link code
+            '''current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
             message = render_to_string('accounts/account_verification_email.html', {
                 'user': user,
@@ -54,8 +54,9 @@ def register(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
-            return redirect('/accounts/login/?command=verification&email='+email)
+            return redirect('/accounts/login/?command=verification&email='+email)'''
+            messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
+            return redirect('/accounts/login/')
     else:
         form = RegistrationForm()
     context = {
@@ -111,7 +112,7 @@ def login(request):
             except:
                 pass
             auth.login(request, user)
-            messages.success(request, 'You are now logged in.')
+            messages.success(request,'You are now logged in.')
             url = request.META.get('HTTP_REFERER')
             try:
                 query = requests.utils.urlparse(url).query
@@ -170,7 +171,7 @@ def forgotPassword(request):
             user = Account.objects.get(email__exact=email)
 
             # Reset password email
-            current_site = get_current_site(request)
+            '''current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
             message = render_to_string('accounts/reset_password_email.html', {
                 'user': user,
@@ -180,7 +181,7 @@ def forgotPassword(request):
             })
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
-            send_email.send()
+            send_email.send()'''
 
             messages.success(request, 'Password reset email has been sent to your email address.')
             return redirect('login')
@@ -189,7 +190,7 @@ def forgotPassword(request):
             return redirect('forgotPassword')
     return render(request, 'accounts/forgotPassword.html')
 
-def resetpassword_validate(request, uidb64, token):
+def resetpassword_validate(request, uidb64, token): #this is email password validation
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = Account._default_manager.get(pk=uid)
@@ -205,13 +206,13 @@ def resetpassword_validate(request, uidb64, token):
         return redirect('login')
 
 
-def resetPassword(request):
+def resetPassword(request): #after the mail is sent the mail link will open this function 
     if request.method == 'POST':
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
         if password == confirm_password:
-            uid = request.session.get('uid')
+            uid = request.session.get('uid') #this uid is coming from resetpassword_validate
             user = Account.objects.get(pk=uid)
             user.set_password(password)
             user.save()

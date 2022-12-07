@@ -4,8 +4,8 @@ from .models import Account,UserProfile
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'placeholder': 'Enter Password',
-        'class': 'form-control',
+        'placeholder': 'Enter Password',#form control to password field we can give it to all if we wish to 
+        'class': 'form-control', #form control it will take css of that particular class 
     }))
 
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -16,7 +16,7 @@ class RegistrationForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'phone_number', 'email', 'password']
 
     def clean(self):
-        cleaned_data = super(RegistrationForm, self).clean()
+        cleaned_data = super(RegistrationForm, self).clean() #we are using super class bcoz we are modifing the class attributes given by django
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
 
@@ -32,7 +32,7 @@ class RegistrationForm(forms.ModelForm):
         self.fields['phone_number'].widget.attrs['placeholder'] = 'Enter Phone Number'
         self.fields['email'].widget.attrs['placeholder'] = 'Enter Email Address'
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['class'] = 'form-control' #form control to all paraeters in registerion form
 
 class UserForm(forms.ModelForm):
     class Meta:

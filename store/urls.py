@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('jshree/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('',views.store,name='store'),
     path('category/<slug:category_slug>/',views.store,name='product_by_category'), #path for item by category,from here the name is passed to category models get_url fuction to return url of categories
     path('category/<slug:category_slug>/<slug:product_slug>/',views.product_detail,name='product_detail'),#path for each product details

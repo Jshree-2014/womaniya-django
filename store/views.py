@@ -17,22 +17,22 @@ def store(request, category_slug=None):
     categories = None
     products = None
 
-    if category_slug !=None:
+    if category_slug !=None: #this paginator is when user select particular category
         categories = get_object_or_404(Category, slug=category_slug) #if categories we search is not found it will return 404 error
         products = Product.objects.filter(category=categories,is_available=True) #to check if its available
         paginator = Paginator(products,1)
         page      = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
-    else:
+    else: #this paginator is when user clicks on all product
         products  = Product.objects.all().filter(is_available=True).order_by('id') #get all those product which are avalilable 
-        paginator = Paginator(products,3)
-        page      = request.GET.get('page')
-        paged_products = paginator.get_page(page)
+        paginator = Paginator(products,3) #out of available we took 3 one one page
+        page      = request.GET.get('page') #here we capture url that comes with page number
+        paged_products = paginator.get_page(page) #it will store the 3 item
         product_count = products.count()
 
     context={
-        'products':paged_products,
+        'products':paged_products, #we passing 3 item to template
         'counts':product_count,
     }
 
@@ -47,7 +47,7 @@ def product_detail(request, category_slug, product_slug):
 
     if request.user.is_authenticated:
         try:
-            orderproduct = OrderProduct.objects.filter(user=request.user, product_id=single_product.id).exists()
+            orderproduct = OrderProduct.objects.filter(user=request.user, product_id=single_product.id).exists() #if true it means product added into cart 
         except OrderProduct.DoesNotExist:
             orderproduct = None
     else:
