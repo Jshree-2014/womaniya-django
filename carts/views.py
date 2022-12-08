@@ -9,6 +9,9 @@ from django.http import HttpResponse
 
 def _cart_id(request):
     cart = request.session.session_key
+    #print(cart)
+    #data1=Cart() #my code
+    #data1.cart_id=cart #mycode
     if not cart:
         cart = request.session.create()
     return cart
