@@ -12,6 +12,7 @@ from .forms import ReviewForm
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from orders.models import OrderProduct
+from accounts.models import UserProfile
 
 def store(request, category_slug=None):
     categories = None
@@ -101,4 +102,9 @@ def submit_review(request, product_id):
                 data.user_id = request.user.id
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
+                '''userprofile = UserProfile.objects.get(user_id=request.user.id)
+                context = {
+                    'userprofile': userprofile,
+                }
+                return render(request, 'store/product_detail.html', context)''' #it was rendering dynamic profile picture of reviewer 
                 return redirect(url)
