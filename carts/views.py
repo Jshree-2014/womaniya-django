@@ -1,18 +1,17 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from .models import Cart,CartItem
-from store.models import Product,Variation
+from django.shortcuts import render, redirect, get_object_or_404
+from store.models import Product, Variation
+from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+
 # Create your views here.
+from django.http import HttpResponse
 
-
-def _cart_id(request): #this is private fucntion which will take the session id=session key
+def _cart_id(request):
     cart = request.session.session_key
-    if not cart: #if not cart then create new session and it will return cart id
+    if not cart:
         cart = request.session.create()
     return cart
-
 
 def add_cart(request, product_id):
     current_user = request.user
@@ -55,7 +54,7 @@ def add_cart(request, product_id):
                 if len(product_variation) > 0:
                     item.variations.clear()
                     item.variations.add(*product_variation)
-                item.save() #here i have changed
+                item.save()
         else:
             cart_item = CartItem.objects.create(
                 product = product,
@@ -132,7 +131,6 @@ def add_cart(request, product_id):
         return redirect('cart')
 
 
-
 def remove_cart(request, product_id, cart_item_id):
 
     product = get_object_or_404(Product, id=product_id)
@@ -150,6 +148,7 @@ def remove_cart(request, product_id, cart_item_id):
     except:
         pass
     return redirect('cart')
+
 
 def remove_cart_item(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
@@ -186,7 +185,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'tax'       : tax,
         'grand_total': grand_total,
     }
-    return render(request, 'store/cart.html', context) #correct
+    return render(request, 'store/cart.html', context)
+
 
 @login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):

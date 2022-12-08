@@ -1,7 +1,8 @@
 from django.db import models
-from django.db import models
-from store.models import Product,Variation
+from store.models import Product, Variation
 from accounts.models import Account
+
+
 # Create your models here.
 
 class Cart(models.Model):
@@ -10,6 +11,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.cart_id
+
 
 class CartItem(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)

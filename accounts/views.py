@@ -15,7 +15,6 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
 import requests 
@@ -43,7 +42,7 @@ def register(request):
             profile.save()
 
             # USER ACTIVATION This is email activation link code
-            '''current_site = get_current_site(request)
+            current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
             message = render_to_string('accounts/account_verification_email.html', {
                 'user': user,
@@ -54,9 +53,9 @@ def register(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            return redirect('/accounts/login/?command=verification&email='+email)'''
-            messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
-            return redirect('/accounts/login/')
+            return redirect('/accounts/login/?command=verification&email='+email)
+            #messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
+            #return redirect('/accounts/login/')
     else:
         form = RegistrationForm()
     context = {
@@ -73,7 +72,7 @@ def login(request):
 
         if user is not None:
             try:
-                cart = Cart.objects.get(cart_id=_cart_id(request))
+                cart = Cart.objects.get(cart_id=_cart_id(request)) #after login check i there is any item already in cart
                 is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
                 if is_cart_item_exists:
                     cart_item = CartItem.objects.filter(cart=cart)
